@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
+import IUpdateProductsQuantityDTO from '@modules/products/dtos/IUpdateProductsQuantityDTO';
 import IProductsRepository from '@modules/products/repositories/IProductsRepository';
 import ICustomersRepository from '@modules/customers/repositories/ICustomersRepository';
 import Order from '../infra/typeorm/entities/Order';
@@ -39,9 +40,41 @@ class CreateOrderService {
 
     const findProducts = await this.productsRepository.findAllById(products);
 
+    if (findProducts.length !== products.length) {
+      throw new AppError('One or more products was not found', 400);
+    }
+
+    const updatedQuantities: IUpdateProductsQuantityDTO[] = [];
+
+    const updatedProducts = findProducts.map(findProduct => {
+      const orderProduct = products.find(
+        product => product.id === findProduct.id,
+      );
+
+      if (orderProduct) {
+        if (findProduct.quantity < orderProduct.quantity) {
+          throw new AppError('There is no amount in the stack');
+        }
+
+        updatedQuantities.push({
+          id: orderProduct.id,
+          quantity: findProduct.quantity - orderProduct.quantity,
+        });
+
+        return {
+          ...findProduct,
+          quantity: orderProduct.quantity,
+        };
+      }
+
+      return findProduct;
+    });
+
+    await this.productsRepository.updateQuantity(updatedQuantities);
+
     const order = await this.ordersRepository.create({
       customer,
-      products: findProducts.map(product => ({
+      products: updatedProducts.map(product => ({
         product_id: product.id,
         price: product.price,
         quantity: product.quantity,

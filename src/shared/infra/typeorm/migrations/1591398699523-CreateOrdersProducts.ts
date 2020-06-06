@@ -22,22 +22,18 @@ export default class CreateOrdersProducts1591398699523
           {
             name: 'order_id',
             type: 'uuid',
-            isNullable: false,
           },
           {
             name: 'product_id',
             type: 'uuid',
-            isNullable: false,
           },
           {
-            name: 'quantaty',
+            name: 'quantity',
             type: 'integer',
-            isNullable: false,
           },
           {
             name: 'price',
             type: 'decimal',
-            isNullable: false,
           },
           {
             name: 'created_at',

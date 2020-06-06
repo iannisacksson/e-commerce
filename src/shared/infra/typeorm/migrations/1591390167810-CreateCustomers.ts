@@ -17,11 +17,13 @@ export default class CreateCustomers1591390167810
           {
             name: 'name',
             type: 'varchar',
+            isNullable: false,
           },
           {
             name: 'email',
             type: 'varchar',
             isUnique: true,
+            isNullable: false,
           },
           {
             name: 'created_at',

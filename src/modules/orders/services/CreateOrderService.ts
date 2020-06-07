@@ -35,7 +35,7 @@ class CreateOrderService {
     const customer = await this.customersRepository.findById(customer_id);
 
     if (!customer) {
-      throw new AppError('User not found', 404);
+      throw new AppError('User not found', 400);
     }
 
     const findProducts = await this.productsRepository.findAllById(products);

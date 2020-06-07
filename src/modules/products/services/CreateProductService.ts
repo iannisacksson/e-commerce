@@ -22,7 +22,7 @@ class CreateProductService {
     const checkProductExist = await this.productsRepository.findByName(name);
 
     if (checkProductExist) {
-      throw new AppError('Product already exist', 409);
+      throw new AppError('Product already exist', 400);
     }
 
     const product = await this.productsRepository.create({

@@ -87,7 +87,7 @@ describe('App', () => {
     );
   });
 
-  it('should not be able to create a product with one name thats already registered', async () => {
+  it('should not be able to create a customer with one e-mail thats already registered', async () => {
     const product = await request(app).post('/products').send({
       name: 'Produto 01',
       price: 500,
@@ -108,7 +108,7 @@ describe('App', () => {
       quantity: 50,
     });
 
-    expect(response.status).toBe(409);
+    expect(response.status).toBe(400);
   });
 
   it('should be able to create a new order', async () => {
@@ -158,7 +158,7 @@ describe('App', () => {
       customer_id: '6a1922c8-af6e-470e-9a34-621cb0643911',
     });
 
-    expect(response.status).toEqual(404);
+    expect(response.status).toEqual(400);
   });
 
   it('should not be able to create an order with invalid products', async () => {
